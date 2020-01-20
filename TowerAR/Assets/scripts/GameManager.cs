@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
             if (currentCube.transform.localScale.x <= 0f || currentCube.transform.localScale.z <= 0f) {
                 done = true;
                 t.gameObject.SetActive(true);
-                t.text = "Score: " + level;
+                t.text = "Score: " + level+"\n press to start again";
                 return;
 
             }
@@ -43,7 +44,14 @@ public class GameManager : MonoBehaviour
         float xx=Mathf.Abs(currentCube.transform.position.x);
         float zz=(Mathf.Abs(currentCube.transform.position.z));
         if (done)
+        {
+            if (Input.GetKeyDown(KeyCode.Space) || Input.touchCount > 0)
+            {
+                SceneManager.LoadScene(0);
+
+            }
             return;
+        }
         float time = Mathf.Abs(Time.realtimeSinceStartup%2f-1f);
         Vector3 pos1 = lastCube.transform.position + Vector3.up * .1f;
         Vector3 pos2 = pos1 + (level%2==0 ? Vector3.forward: Vector3.left)*1.20f;
@@ -51,7 +59,7 @@ public class GameManager : MonoBehaviour
             currentCube.transform.position = Vector3.Lerp(pos2, pos1, time);
         else
             currentCube.transform.position = Vector3.Lerp(pos1, pos2, time);
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space) ||Input.touchCount>0) {
             NewBlock(xx,zz);
         }
     }
